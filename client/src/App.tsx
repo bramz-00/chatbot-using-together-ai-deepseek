@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2 } from "lucide-react";
+import ReactMarkdown from 'react-markdown'
 
 interface Message {
   sender: "user" | "bot";
@@ -16,7 +17,7 @@ const socket: Socket = io("http://localhost:3000");
 const App: React.FC = () => {
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState<Message[]>([]);
-  const [isTyping, setIsTyping] = useState(false); 
+  const [isTyping, setIsTyping] = useState(false);
   const botBuffer = useRef("");
 
   useEffect(() => {
@@ -67,16 +68,15 @@ const App: React.FC = () => {
             {chat.map((msg, index) => (
               <div
                 key={index}
-                className={` my-2 flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                className={`my-2 flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[75%] px-4 py-2 rounded-2xl text-sm ${
-                    msg.sender === "user"
-                      ? "bg-blue-500 text-white"
+                  className={`max-w-[75%] px-4 py-2 rounded-2xl text-sm prose prose-sm dark:prose-invert ${msg.sender === "user"
+                      ? "bg-blue-500 text-white prose-headings:text-white prose-p:text-white"
                       : "bg-gray-100 dark:bg-gray-800"
-                  }`}
+                    }`}
                 >
-                  {msg.text}
+                  <ReactMarkdown>{msg.text}</ReactMarkdown>
                 </div>
               </div>
             ))}
